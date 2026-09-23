@@ -70,8 +70,8 @@ export function Model3D({
 
   const layers = model.stages[current].layers;
   const shapes = useMemo(
-    () => project(model.prims, layers, view.yaw, view.pitch, SIZE),
-    [model, layers, view],
+    () => project(model.prims, layers, view.yaw, view.pitch, SIZE, zoom),
+    [model, layers, view, zoom],
   );
 
   const rotate = (dyaw: number, dpitch: number) =>
