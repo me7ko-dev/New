@@ -3,19 +3,21 @@ import { cutAll } from './cutting';
 import { ELEMENT_LABEL, formatElevation } from './labels';
 import type { Project } from './types';
 
-const SEP = ';';
-
-function row(cells: (string | number)[]): string {
+function rowWith(cells: (string | number)[], sep: string): string {
   return cells
     .map((c) => {
       const s = typeof c !== 'number' ? c : Number.isInteger(c) ? String(c) : c.toFixed(2).replace('.', ',');
-      return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+      return /[;\t"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
     })
-    .join(SEP);
+    .join(sep);
 }
 
-/** Количествена сметка + спецификация на армировката + разкрой — един CSV за Excel. */
-export function projectCsv(p: Project): string {
+/**
+ * Количествена сметка + спецификация на армировката + разкрой — една таблица за Excel.
+ * `sep` = ';' за CSV файл, '\t' за копиране и поставяне директно в Excel.
+ */
+export function projectCsv(p: Project, sep = ';'): string {
+  const row = (cells: (string | number)[]) => rowWith(cells, sep);
   const s = p.settings;
   const lines: string[] = [row([`Количествена сметка — ${p.name}`]), row([p.address]), ''];
 

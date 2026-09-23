@@ -3,9 +3,8 @@ import { View } from 'react-native';
 
 import { BarShapeSketch, ElementSketch } from '@/components/rebar-sketch';
 import { StatusStepper } from '@/components/status-stepper';
-import { Body, Button, Card, Empty, Label, Row, Screen, Stat, Title } from '@/components/ui';
+import { Body, Button, Card, ConfirmButton, Empty, Label, Row, Screen, Stat, Title } from '@/components/ui';
 import { barWeightPerMeter, calcElement } from '@/lib/calc';
-import { confirm } from '@/lib/confirm';
 import { checklist, ELEMENT_LABEL, elementSize, fmt, levelTitle, tonnes } from '@/lib/labels';
 import { can, useProject } from '@/lib/store';
 
@@ -100,15 +99,13 @@ export default function ElementScreen() {
             title="✏️ Промени"
             onPress={() => router.push({ pathname: '/project/[id]/element/edit', params: { id: p.id, elementId: e.id } })}
           />
-          <Button
-            kind="danger"
+          <ConfirmButton
             title="Изтрий"
-            onPress={() =>
-              confirm(`Да изтрия ли „${e.name}“?`, () => {
-                update((pr) => ({ ...pr, elements: pr.elements.filter((x) => x.id !== e.id) }));
-                router.back();
-              })
-            }
+            confirmTitle={`Изтрий „${e.name}“?`}
+            onConfirm={() => {
+              update((pr) => ({ ...pr, elements: pr.elements.filter((x) => x.id !== e.id) }));
+              router.back();
+            }}
           />
         </Row>
       ) : null}

@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { createContext, useContext, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -136,6 +136,31 @@ export function Button({
       style={({ pressed }) => [styles.button, { backgroundColor: bg }, (pressed || disabled) && { opacity: 0.6 }]}>
       <Text style={[styles.buttonText, { color: fg }]}>{title}</Text>
     </Pressable>
+  );
+}
+
+/**
+ * Опасно действие с потвърждение в самия бутон: първото натискане пита,
+ * второто (до 4 секунди) изпълнява. Работи еднакво навсякъде, без системни прозорци.
+ */
+export function ConfirmButton({ title, confirmTitle, onConfirm }: { title: string; confirmTitle?: string; onConfirm: () => void }) {
+  const [armed, setArmed] = useState(false);
+  useEffect(() => {
+    if (!armed) return;
+    const t = setTimeout(() => setArmed(false), 4000);
+    return () => clearTimeout(t);
+  }, [armed]);
+  return (
+    <Button
+      kind={armed ? 'danger' : 'default'}
+      title={armed ? confirmTitle ?? 'Натиснете пак за потвърждение' : title}
+      onPress={() => {
+        if (armed) {
+          setArmed(false);
+          onConfirm();
+        } else setArmed(true);
+      }}
+    />
   );
 }
 

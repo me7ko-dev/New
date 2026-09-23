@@ -2,10 +2,9 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
 import { PdfView } from '@/components/pdf-view';
-import { Button, Chip, Empty, Label, Row, Screen } from '@/components/ui';
+import { Chip, ConfirmButton, Empty, Label, Row, Screen } from '@/components/ui';
 import { ZoomableImage } from '@/components/zoomable-image';
 import { useTheme } from '@/hooks/use-theme';
-import { confirm } from '@/lib/confirm';
 import { deleteDrawingFile } from '@/lib/files';
 import { DISCIPLINE_LABEL } from '@/lib/labels';
 import { can, useProject } from '@/lib/store';
@@ -30,16 +29,14 @@ export default function DrawingViewer() {
             {d.kind === 'image' ? ' · два пръста = увеличение, двойно докосване = нулиране' : ''}
           </Label>
           {can(role, 'edit') ? (
-            <Button
-              kind="danger"
+            <ConfirmButton
               title="Изтрий"
-              onPress={() =>
-                confirm(`Да изтрия ли „${d.name}“?`, () => {
-                  deleteDrawingFile(d.uri);
-                  update((pr) => ({ ...pr, drawings: pr.drawings.filter((x) => x.id !== d.id) }));
-                  router.back();
-                })
-              }
+              confirmTitle="Изтрий чертежа?"
+              onConfirm={() => {
+                deleteDrawingFile(d.uri);
+                update((pr) => ({ ...pr, drawings: pr.drawings.filter((x) => x.id !== d.id) }));
+                router.back();
+              }}
             />
           ) : null}
         </Row>

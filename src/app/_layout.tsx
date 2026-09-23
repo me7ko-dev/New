@@ -1,5 +1,5 @@
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { DarkTheme, DefaultTheme, router, Stack, ThemeProvider } from 'expo-router';
+import { Platform, Pressable, Text, useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { Colors } from '@/constants/theme';
@@ -19,6 +19,16 @@ export default function RootLayout() {
               headerTintColor: c.text,
               headerTitleStyle: { fontWeight: '700' },
               headerBackButtonDisplayMode: 'minimal',
+              // В браузъра стрелката е текст, за да не зависи от картинки, заредени от сървъра.
+              headerLeft:
+                Platform.OS === 'web'
+                  ? ({ canGoBack }) =>
+                      canGoBack ? (
+                        <Pressable accessibilityRole="button" accessibilityLabel="Назад" onPress={() => router.back()} hitSlop={10} style={{ paddingHorizontal: 12 }}>
+                          <Text style={{ color: c.text, fontSize: 24, fontWeight: '700' }}>←</Text>
+                        </Pressable>
+                      ) : null
+                  : undefined,
             }}
           />
         </ThemeProvider>

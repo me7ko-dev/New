@@ -1,9 +1,8 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 
-import { Body, Button, Card, Empty, Field, Label, Row, Screen, Title } from '@/components/ui';
+import { Body, Button, Card, ConfirmButton, Empty, Field, Label, Row, Screen, Title } from '@/components/ui';
 import { DEFAULT_SETTINGS, type CalcSettings } from '@/lib/calc';
-import { confirm } from '@/lib/confirm';
 import { uid } from '@/lib/factory';
 import { formatElevation } from '@/lib/labels';
 import { useProject, useStore } from '@/lib/store';
@@ -67,11 +66,10 @@ export default function SettingsScreen() {
                 if (Number.isFinite(n)) setLevel(l.id, { elevation: n });
               }}
             />
-            <Button
-              kind="danger"
+            <ConfirmButton
               title="✕"
-              onPress={() =>
-                confirm(`Да изтрия ли „${l.name}“ и всичките му елементи?`, () =>
+              confirmTitle={`Изтрий „${l.name}“ с елементите?`}
+              onConfirm={() =>
                   update((pr) => ({
                     ...pr,
                     levels: pr.levels.filter((x) => x.id !== l.id),
@@ -79,7 +77,6 @@ export default function SettingsScreen() {
                     tasks: pr.tasks.filter((t) => t.levelId !== l.id),
                     drawings: pr.drawings.map((d) => (d.levelId === l.id ? { ...d, levelId: null } : d)),
                   }))
-                )
               }
             />
           </Row>
@@ -99,15 +96,13 @@ export default function SettingsScreen() {
       <Label>Опасна зона</Label>
       <Card>
         <Body>Изтриването на обекта е окончателно.</Body>
-        <Button
-          kind="danger"
+        <ConfirmButton
           title="Изтрий обекта"
-          onPress={() =>
-            confirm(`Да изтрия ли „${p.name}“?`, () => {
-              removeProject(p.id);
-              router.dismissAll();
-            })
-          }
+          confirmTitle={`Изтрий „${p.name}“ завинаги?`}
+          onConfirm={() => {
+            removeProject(p.id);
+            router.dismissAll();
+          }}
         />
       </Card>
     </Screen>

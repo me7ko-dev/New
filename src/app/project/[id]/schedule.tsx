@@ -2,9 +2,8 @@ import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { Body, Button, Card, Chip, Empty, Field, Label, Progress, Row, Screen } from '@/components/ui';
+import { Body, Button, Card, Chip, ConfirmButton, Empty, Field, Label, Progress, Row, Screen } from '@/components/ui';
 import { useTheme } from '@/hooks/use-theme';
-import { confirm } from '@/lib/confirm';
 import { addDays, isoDate, uid } from '@/lib/factory';
 import { isTaskLate, LATE_COLOR, TASK_STATUS_LABEL } from '@/lib/labels';
 import { pct, tasksProgress } from '@/lib/progress';
@@ -76,11 +75,7 @@ export default function ScheduleScreen() {
             key={task.id}
             disabled={!can(role, 'progress')}
             onPress={() => setTask(task.id, { status: NEXT[task.status], doneAt: NEXT[task.status] === 'done' ? isoDate(new Date()) : undefined })}
-            onLongPress={
-              can(role, 'edit')
-                ? () => confirm(`Да изтрия ли задачата „${task.title}“?`, () => update((pr) => ({ ...pr, tasks: pr.tasks.filter((x) => x.id !== task.id) })))
-                : undefined
-            }>
+>
             <Card style={{ borderLeftWidth: 6, borderLeftColor: color }}>
               <Row style={{ justifyContent: 'space-between' }}>
                 <Body bold style={{ flexShrink: 1 }}>
@@ -99,6 +94,15 @@ export default function ScheduleScreen() {
                   <View style={{ position: 'absolute', left: `${today * 100}%`, top: -3, width: 2, height: 14, backgroundColor: t.text }} />
                 ) : null}
               </View>
+              {can(role, 'edit') ? (
+                <Row>
+                  <ConfirmButton
+                    title="Изтрий задачата"
+                    confirmTitle="Натиснете пак, за да изтриете"
+                    onConfirm={() => update((pr) => ({ ...pr, tasks: pr.tasks.filter((x) => x.id !== task.id) }))}
+                  />
+                </Row>
+              ) : null}
             </Card>
           </Pressable>
         );
@@ -125,10 +129,7 @@ export default function ScheduleScreen() {
             </Row>
           </Card>
         ) : (
-          <>
-            <Button kind="primary" title="＋ Нова задача" onPress={() => setAdding(true)} />
-            <Label style={{ textTransform: 'none' }}>Задръжте задача, за да я изтриете.</Label>
-          </>
+          <Button kind="primary" title="＋ Нова задача" onPress={() => setAdding(true)} />
         )
       ) : null}
     </Screen>

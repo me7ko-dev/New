@@ -2,6 +2,9 @@ import * as DocumentPicker from 'expo-document-picker';
 
 export type PickedFile = { name: string; kind: 'pdf' | 'image'; uri: string };
 
+/** Браузърът пази данните в localStorage (обикновено ~5 MB общо), затова ограничаваме размера. */
+const MAX_BYTES = 3 * 1024 * 1024;
+
 function toDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const r = new FileReader();
@@ -16,7 +19,12 @@ export async function pickDrawing(): Promise<PickedFile | null> {
   const res = await DocumentPicker.getDocumentAsync({ type: ['application/pdf', 'image/*'] });
   if (res.canceled || !res.assets[0]) return null;
   const a = res.assets[0];
-  const blob = await (await fetch(a.uri)).blob();
+  const blob = a.file ?? (await (await fetch(a.uri)).blob());
+  if (blob.size > MAX_BYTES) {
+    throw new Error(
+      `файлът е ${(blob.size / 1024 / 1024).toFixed(1)} MB, а в браузъра се побират до 3 MB. Намалете снимката или разделете PDF-а.`
+    );
+  }
   const kind = a.mimeType === 'application/pdf' || a.name.toLowerCase().endsWith('.pdf') ? 'pdf' : 'image';
   return { name: a.name.replace(/\.[^.]+$/, ''), kind, uri: await toDataUrl(blob) };
 }
@@ -24,13 +32,12 @@ export async function pickDrawing(): Promise<PickedFile | null> {
 export function deleteDrawingFile(_uri: string) {}
 
 export async function openExternally(uri: string) {
-  const blob = await (await fetch(uri)).blob();
-  window.open(URL.createObjectURL(blob), '_blank');
+  window.open(uri, '_blank');
 }
 
 export async function shareTextFile(name: string, content: string, mimeType: string) {
   // BOM, за да отвори Excel кирилицата правилно.
-  const blob = new Blob(['\ufeff' + content], { type: mimeType });
+  const blob = new Blob(['﻿' + content], { type: mimeType });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = name;

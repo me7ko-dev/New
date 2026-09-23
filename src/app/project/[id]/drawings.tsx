@@ -32,7 +32,7 @@ export default function DrawingsScreen() {
         setPLevel(level === 'all' ? null : level);
       }
     } catch (e) {
-      setError(`Файлът не може да се отвори: ${String(e)}`);
+      setError(`Файлът не може да се качи: ${e instanceof Error ? e.message : String(e)}`);
     }
   };
 

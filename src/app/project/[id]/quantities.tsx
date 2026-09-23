@@ -1,3 +1,4 @@
+import * as Clipboard from 'expo-clipboard';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
@@ -14,6 +15,7 @@ export default function QuantitiesScreen() {
   const { project: p } = useProject(id);
   const [levelId, setLevelId] = useState<string | undefined>();
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   if (!p) return <Screen title="Количества"><Empty icon="🤷" text="Обектът не е намерен." /></Screen>;
 
   const level = p.levels.find((l) => l.id === levelId);
@@ -31,6 +33,16 @@ export default function QuantitiesScreen() {
       await shareTextFile(`kolichestva-${new Date().toISOString().slice(0, 10)}.csv`, projectCsv(p), 'text/csv');
     } catch (e) {
       setError(`Експортът не успя: ${String(e)}`);
+    }
+  };
+
+  const copyTable = async () => {
+    setError(null);
+    try {
+      await Clipboard.setStringAsync(projectCsv(p, '\t'));
+      setCopied(true);
+    } catch (e) {
+      setError(`Копирането не успя: ${e instanceof Error ? e.message : String(e)}`);
     }
   };
 
@@ -102,9 +114,11 @@ export default function QuantitiesScreen() {
       ) : null}
 
       <Row>
-        <Button kind="primary" title="📊 Експорт за Excel" onPress={exportCsv} />
+        <Button kind="primary" title="📋 Копирай за Excel" onPress={copyTable} />
+        <Button title="📊 Свали файл" onPress={exportCsv} />
         <Button title="✂️ Разкрой на желязото" onPress={() => router.push({ pathname: '/project/[id]/cutting', params: { id: p.id } })} />
       </Row>
+      {copied ? <Body style={{ color: '#2F855A' }}>✔ Копирано. Отворете Excel и поставете с Ctrl+V.</Body> : null}
       {error ? <Body style={{ color: '#C53030' }}>{error}</Body> : null}
       <Label style={{ textTransform: 'none' }}>
         Количествата се смятат по въведените размери от конструктивния проект. Оразмеряването на конструкцията остава
