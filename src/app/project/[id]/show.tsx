@@ -3,6 +3,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { Model3D } from '@/components/model-3d';
 import { ElementSketch } from '@/components/rebar-sketch';
 import { nextStatus, StatusStepper } from '@/components/status-stepper';
 import { Body, Button, Card, Chip, Empty, Label, Row, Screen } from '@/components/ui';
@@ -63,6 +64,7 @@ export default function ShowScreen() {
   const { project: p, update, role } = useProject(id);
   const [filter, setFilter] = useState<string | undefined>(levelId);
   const [i, setI] = useState(0);
+  const [mode, setMode] = useState<'3d' | 'sketch'>('3d');
   const t = useTheme();
   if (!p) return <Screen title="Покажи"><Empty icon="🤷" text="Обектът не е намерен." /></Screen>;
 
@@ -101,8 +103,24 @@ export default function ShowScreen() {
           <Card>
             {step.kind === 'element' ? (
               <>
-                <Label>Така трябва да изглежда</Label>
-                <ElementSketch element={step.element} settings={p.settings} />
+                <Row style={{ justifyContent: 'space-between' }}>
+                  <Label>Така трябва да изглежда</Label>
+                  <Row>
+                    <Chip title="🧊 3D" selected={mode === '3d'} onPress={() => setMode('3d')} />
+                    <Chip title="📐 Скица" selected={mode === 'sketch'} onPress={() => setMode('sketch')} />
+                  </Row>
+                </Row>
+                {mode === '3d' ? (
+                  <Model3D key={step.element.id} element={step.element} settings={p.settings} />
+                ) : (
+                  <ElementSketch element={step.element} settings={p.settings} />
+                )}
+                <Button
+                  title="🧱 Как се прави — стъпка по стъпка"
+                  onPress={() =>
+                    router.push({ pathname: '/project/[id]/element/[elementId]', params: { id: p.id, elementId: step.element.id } })
+                  }
+                />
               </>
             ) : (
               <Pressable

@@ -105,7 +105,7 @@ function ColumnSketch({ e, s, c }: { e: Extract<Element, { type: 'column' }>; s:
       <Dim x1={x0} y1={y0 + h + 22} x2={x0 + w} y2={y0 + h + 22} text={`${e.b} см`} c={c} />
       <Dim x1={x0 - 22} y1={y0} x2={x0 - 22} y2={y0 + h} text={`${e.h}`} c={c} vertical />
       <Tag x={tx} y={y0 + 40} text={`${e.bars.n} × Ø${e.bars.d}`} color={c.sketchRebar} />
-      <Tag x={tx} y={y0 + 80} text={`стреме Ø${e.stirrup.d}/${e.stirrup.s}`} color={c.sketchStirrup} />
+      <Tag x={tx} y={y0 + 80} text={`бигли Ø${e.stirrup.d}/${e.stirrup.s}`} color={c.sketchStirrup} />
       <Tag x={tx} y={y0 + 120} text={`покритие ${fmt(s.cover)}`} color={c.textSecondary} />
       <Tag x={tx} y={y0 + 160} text={`h = ${fmt(e.height)} м`} color={c.textSecondary} />
     </Frame>
@@ -152,7 +152,7 @@ function BeamSketch({ e, s, c }: { e: Extract<Element, { type: 'beam' }>; s: Cal
       <Dim x1={x0} y1={y0 + H + 24} x2={x0 + L} y2={y0 + H + 24} text={`${fmt(e.length)} м`} c={c} />
 
       <Tag x={x0} y={sy + 26} text={`долу ${e.bottom.n} × Ø${e.bottom.d}`} color={c.sketchRebar} />
-      <Tag x={x0} y={sy + 64} text={`стремена Ø${e.stirrup.d}`} color={c.sketchStirrup} />
+      <Tag x={x0} y={sy + 64} text={`бигли Ø${e.stirrup.d}`} color={c.sketchStirrup} />
       <Tag x={x0} y={sy + 96} text={`през ${e.stirrup.s} см`} color={c.sketchStirrup} />
       <Rect x={sx} y={sy} width={sw} height={sh} fill={c.sketchConcrete} stroke={c.sketchLine} strokeWidth={2} />
       <Rect x={sx + scov} y={sy + scov} width={sw - 2 * scov} height={sh - 2 * scov} fill="none" stroke={c.sketchStirrup} strokeWidth={3} rx={4} />

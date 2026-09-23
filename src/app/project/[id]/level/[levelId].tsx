@@ -29,6 +29,13 @@ export default function LevelScreen() {
         onPress={() => router.push({ pathname: '/project/[id]/show', params: { id: p.id, levelId: level.id } })}
       />
 
+      <BigButton
+        icon="🚚"
+        title="Бетонът за този етаж"
+        hint={`${fmt(sum.concreteWithWaste, 1)} м³ — какво да поръчам и проверя`}
+        onPress={() => router.push({ pathname: '/project/[id]/concrete', params: { id: p.id, levelId: level.id } })}
+      />
+
       {drawings.length > 0 ? (
         <>
           <Label>Чертежи за етажа</Label>

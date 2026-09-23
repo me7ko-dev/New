@@ -103,7 +103,7 @@ export function checklist(e: Element, s: CalcSettings): string[] {
       return [
         `Размер ${e.b}×${e.h} см, височина ${fmt(e.height)} м`,
         `${e.bars.n} пръта Ø${e.bars.d} — по един във всеки ъгъл, останалите на равни разстояния`,
-        `Стремена Ø${e.stirrup.d} през ${e.stirrup.s} см, куките да са на различни ъгли`,
+        `Бигли Ø${e.stirrup.d} през ${e.stirrup.s} см, куките да са на различни ъгли`,
         `Прътите да стърчат ${lap(e.bars.d)} над плочата — за снаждане с горния етаж`,
         cover,
       ];
@@ -112,7 +112,7 @@ export function checklist(e: Element, s: CalcSettings): string[] {
         `Сечение ${e.b}×${e.h} см под плочата, дължина ${fmt(e.length)} м`,
         `Долу: ${e.bottom.n} пръта Ø${e.bottom.d}`,
         e.top.n > 0 ? `Горе: ${e.top.n} пръта Ø${e.top.d}` : 'Горе: без пръти по проект',
-        `Стремена Ø${e.stirrup.d} през ${e.stirrup.s} см`,
+        `Бигли Ø${e.stirrup.d} през ${e.stirrup.s} см`,
         `Прътите влизат в колоните поне ${anchor(e.bottom.d)}`,
         cover,
       ];

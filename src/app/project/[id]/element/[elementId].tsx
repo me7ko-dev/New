@@ -1,6 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
+import { HowTo } from '@/components/how-to';
 import { BarShapeSketch, ElementSketch } from '@/components/rebar-sketch';
 import { StatusStepper } from '@/components/status-stepper';
 import { Body, Button, Card, ConfirmButton, Empty, Label, Row, Screen, Stat, Title } from '@/components/ui';
@@ -28,6 +29,8 @@ export default function ElementScreen() {
         <ElementSketch element={e} settings={p.settings} />
         <Body>{elementSize(e)}</Body>
       </Card>
+
+      <HowTo element={e} settings={p.settings} />
 
       <Card>
         <Label>Докъде е стигнала работата</Label>

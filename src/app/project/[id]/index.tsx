@@ -31,6 +31,8 @@ export default function ProjectScreen() {
       <BigButton icon="🗺" title="Чертежи и снимки" hint={`${p.drawings.length} файла — PDF и снимки`} onPress={() => go('/project/[id]/drawings')} />
       <BigButton icon="📅" title="График" hint="Какво кога се прави и какво е свършено" onPress={() => go('/project/[id]/schedule')} />
       <BigButton icon="🧮" title="Количества" hint="Бетон, армировка, кофраж, тухли — от ±0.00 до покрива" onPress={() => go('/project/[id]/quantities')} />
+      <BigButton icon="🚚" title="Бетонът идва" hint="Колко да поръчам и какво да проверя, когато дойде" onPress={() => go('/project/[id]/concrete')} />
+      <BigButton icon="📖" title="Как се чете чертежът" hint="Преводач на надписите и речник с прости думи" onPress={() => router.push('/learn')} />
       {can(role, 'progress') ? (
         <BigButton icon="✂️" title="Разкрой на желязото" hint="Как да се нарежат прътите с най-малко отпадък" onPress={() => go('/project/[id]/cutting')} />
       ) : null}

@@ -229,7 +229,7 @@ function elementBars(e: Element, s: CalcSettings): BarItem[] {
       const ib = e.h - 2 * c;
       return [
         straight('1', 'Надлъжни пръти (+ снаждане за горния етаж)', e.bars.d, e.bars.n * n, e.height + lapLength(e.bars.d, s), s),
-        stirrup('2', 'Стремена', e.stirrup.d, countAt(e.height, e.stirrup.s) * n, ia, ib, s),
+        stirrup('2', 'Бигли (стремена)', e.stirrup.d, countAt(e.height, e.stirrup.s) * n, ia, ib, s),
       ];
     }
     case 'beam': {
@@ -239,7 +239,7 @@ function elementBars(e: Element, s: CalcSettings): BarItem[] {
         out.push(straight('1', 'Долни пръти', e.bottom.d, e.bottom.n * n, e.length + 2 * anchorLength(e.bottom.d, s), s));
       if (e.top.n > 0)
         out.push(straight('2', 'Горни пръти', e.top.d, e.top.n * n, e.length + 2 * anchorLength(e.top.d, s), s));
-      out.push(stirrup('3', 'Стремена', e.stirrup.d, countAt(e.length, e.stirrup.s) * n, e.b - 2 * c, e.h - 2 * c, s));
+      out.push(stirrup('3', 'Бигли (стремена)', e.stirrup.d, countAt(e.length, e.stirrup.s) * n, e.b - 2 * c, e.h - 2 * c, s));
       return out;
     }
     case 'slab': {
