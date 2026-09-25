@@ -46,3 +46,12 @@ export async function shareTextFile(name: string, content: string, mimeType: str
   a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
+
+/** В браузъра чертежът вече е data URL — вадим типа и base64 частта. */
+export async function readBase64(uri: string, kind: 'pdf' | 'image'): Promise<{ mime: string; data: string }> {
+  const m = uri.match(/^data:([^;,]+)?(;base64)?,(.*)$/s);
+  if (m && m[2]) return { mime: m[1] ?? (kind === 'pdf' ? 'application/pdf' : 'image/jpeg'), data: m[3] };
+  const blob = await (await fetch(uri)).blob();
+  const url = await toDataUrl(blob);
+  return { mime: blob.type || (kind === 'pdf' ? 'application/pdf' : 'image/jpeg'), data: url.slice(url.indexOf(',') + 1) };
+}

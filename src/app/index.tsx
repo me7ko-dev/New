@@ -68,6 +68,7 @@ export default function Home() {
       })}
 
       <BigButton icon="📖" title="Как се чете чертежът" hint="Напишете надпис от чертежа — ще ви го обясним" onPress={() => router.push('/learn')} />
+      <BigButton icon="🤖" title="AI за чертежи" hint="Ключове за разчитане на снимка или PDF на плана" onPress={() => router.push('/ai')} />
 
       {can(role, 'edit') ? <Button kind="primary" title="＋ Нов обект" onPress={() => router.push('/project/new')} /> : null}
     </Screen>

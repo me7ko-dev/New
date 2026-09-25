@@ -233,6 +233,7 @@ export function Field({
   numeric,
   unit,
   placeholder,
+  secure,
 }: {
   label: string;
   value: string;
@@ -240,6 +241,8 @@ export function Field({
   numeric?: boolean;
   unit?: string;
   placeholder?: string;
+  /** Скрит текст — за ключове. */
+  secure?: boolean;
 }) {
   const t = useTheme();
   const inRow = useContext(InRow);
@@ -252,6 +255,9 @@ export function Field({
           onChangeText={onChange}
           keyboardType={numeric ? 'decimal-pad' : 'default'}
           placeholder={placeholder}
+          secureTextEntry={secure}
+          autoCapitalize={secure ? 'none' : undefined}
+          autoCorrect={secure ? false : undefined}
           placeholderTextColor={t.textSecondary}
           style={[styles.input, { color: t.text }]}
         />

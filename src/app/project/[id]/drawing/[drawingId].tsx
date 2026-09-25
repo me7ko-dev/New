@@ -2,7 +2,7 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
 import { PdfView } from '@/components/pdf-view';
-import { Chip, ConfirmButton, Empty, Label, Row, Screen } from '@/components/ui';
+import { Button, Chip, ConfirmButton, Empty, Label, Row, Screen } from '@/components/ui';
 import { ZoomableImage } from '@/components/zoomable-image';
 import { useTheme } from '@/hooks/use-theme';
 import { deleteDrawingFile } from '@/lib/files';
@@ -28,6 +28,13 @@ export default function DrawingViewer() {
             {DISCIPLINE_LABEL[d.discipline].icon} {DISCIPLINE_LABEL[d.discipline].title} · {level ? level.name : 'Целия обект'}
             {d.kind === 'image' ? ' · два пръста = увеличение, двойно докосване = нулиране' : ''}
           </Label>
+          {can(role, 'edit') ? (
+            <Button
+              kind="primary"
+              title="🤖 Разчети с AI"
+              onPress={() => router.push({ pathname: '/project/[id]/read/[drawingId]', params: { id: p.id, drawingId: d.id } })}
+            />
+          ) : null}
           {can(role, 'edit') ? (
             <ConfirmButton
               title="Изтрий"
