@@ -10,7 +10,8 @@ const cssFiles = [...html.matchAll(/<link rel="stylesheet" href="\/([^"]+)"/g)].
 const jsFiles = [...html.matchAll(/<script src="\/([^"]+)"/g)].map((m) => m[1]);
 if (jsFiles.length === 0) throw new Error('В dist/index.html няма JS пакет — първо изпълнете expo export.');
 
-const read = (f) => fs.readFileSync(path.join(dist, f), 'utf8');
+const base = (JSON.parse(fs.readFileSync("app.json", "utf8")).expo.experiments?.baseUrl ?? "").replace(/^\//, "");
+const read = (f) => fs.readFileSync(path.join(dist, base && f.startsWith(base + "/") ? f.slice(base.length + 1) : f), "utf8");
 // `</script` вътре в пакета би затворило тага по-рано.
 const safeJs = (s) => s.replace(/<\/script/gi, '<\\/script');
 
